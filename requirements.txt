@@ -1,0 +1,6 @@
+Flask
+Flask-MySQLdb
+psycopg2
+flask-cors
+flask_sqlalchemy
+PyMySQL
