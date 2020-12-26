@@ -7,3 +7,8 @@
 ## Flask SQLAlchemy documentation
 
 - [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/2.x/)
+
+## Activate your env first
+
+- python3 -m venv env
+- source env/bin/activate
