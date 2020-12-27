@@ -1,33 +1,15 @@
 from flask import Blueprint, render_template
 from ecommerce.models import General
+from ecommerce.main import db
 
-general_bp = Blueprint('products_bp', __name__,
+general_bp = Blueprint('general_bp', __name__,
     template_folder='templates',
     static_folder='static', static_url_path='assets')
 
 @general_bp.route('/')
 def home():
-# 	query = "select * from `data`"
-# 	cur.execute(query)
-# 	data = cur.fetchall()
-# 	for lala in data:
-# 		print(lala[2])
-	cursor = mysql.connection.cursor()
-        cursor.execute('SELECT * FROM data')
-        users = cursor.fetchall()
-        allData = []
-
-        for i in users:
-            id = i[0]
-            name = i[1]
-            age = i[2]
-            dataDict = {
-                "id": id,
-                "name": name,
-                "age": age
-            }
-            allData.append(dataDict)
-	return render_template('general/content.html', data=jsonify(allData))
+    all_data = Users.query.all()
+	return render_template('general/content.html', employees=all_data)
 
 # @general_bp.route('/', methods=["GET", "POST"])
 # def home():
@@ -50,44 +32,24 @@ def home():
 
 @general_bp.route('/tambah', methods=['POST'])
 def tambah():
-# 	title = request.form['title']
-# 	body = request.form['body']
-# 	query = "insert into `data` (title, body) values ('{0}','{1}')".format(title, body)
-# 	cur.execute(query)
-# 	conn.commit()
-	body = request.form
-        name = body['name']
-        age = body['age']
-
-        cursor = mysql.connection.cursor()
-        cursor.execute(f'INSERT INTO data VALUES(null, { str(name) }, { str(age) })')
-        mysql.connection.commit()
-        cursor.close()
-        print(jsonify({
-            'status': 'Data is posted to MySQL!',
-            'name': name,
-            'age': age
-        }))
+    name = request.form['name']
+    age = request.form['age']
+    my_data = User(name=name, age=age)
+    db.session.add(my_data)
+    db.session.commit()
+    pesan = u'Data is posted to MySQL!'
+    flash(pesan, 'success')
 	return redirect(url_for('home'))
 
 @general_bp.route('/edit', methods=['POST'])
 def edit():
-# 	id_data = request.form['id']
-# 	title = request.form['title']
-# 	body = request.form['body']
-# 	query = "UPDATE data SET title='{1}', body='{2}' WHERE id={0}".format(id_data, title, body)
-# 	cur.execute(query)
-# 	conn.commit()
-	
-	body = request.form
-        name = body['name']
-        age = body['age']
-
-        cursor = mysql.connection.cursor()
-        cursor.execute(f'UPDATE data SET title='{ id_data }', body='{ title }' WHERE id={ body }')
-        mysql.connection.commit()
-        cursor.close()
-        print(jsonify({'status': 'Data '+id+' is updated on MySQL!'}))
+    my_data = User.query.get(result.id_user)
+    my_data.id_data = request.form['id']
+    my_data.title = request.form['title']
+    my_data.body = request.form['body']
+    db.session.commit()
+    pesan = u'Data i is updated on MySQL!'
+    flash(pesan, 'success')
 	return redirect(url_for('home'))
 
 # @general_bp.route("/update", methods=["POST"])
@@ -105,14 +67,11 @@ def edit():
 
 @general_bp.route('/delete/<string:id_data>', methods=['GET'])
 def delete(id_data):
-# 	query = "DELETE from `data` where id={0}".format(id_data)
-# 	cur.execute(query)
-# 	conn.commit()
-        cursor = mysql.connection.cursor()
-        cursor.execute(f'DELETE from `data` where id={ id_data }')
-        mysql.connection.commit()
-        cursor.close()
-        print(jsonify({'status': 'Data '+id+' is deleted on MySQL!'}))
+    my_data = User.query.get(id_data)
+    db.session.delete(my_data)
+    db.session.commit()
+    pesan = u'Data i is deleted on MySQL!'
+    flash(pesan, 'success')
 	return redirect(url_for('home'))
 
 # @general_bp.route("/delete", methods=["POST"])
