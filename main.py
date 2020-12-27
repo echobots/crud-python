@@ -14,7 +14,7 @@ app = Flask(__name__)
 # app = Flask(__name__, static_url_path='', static_folder='static', template_folder='templates')
 
 #SqlAlchemy Database Configuration With Mysql or Postgresql
-app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:@Naufaldb123@localhost/startup" # 'postgresql+psycopg2://postgres:password@ip:port/database'
+app.config['SQLALCHEMY_DATABASE_URI'] = "mysql+pymysql://root:password@localhost/database" # 'postgresql+psycopg2://postgres:password@ip:port/database'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # sqlite
